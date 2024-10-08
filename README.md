@@ -2,12 +2,11 @@
 
 ## About:
 
-**Steady Node** is an open-source hardware and software project designed to be a compact **two DMX univers CRMX transmitter** that can be attached to the back of an iPad, with ArtNet data passing through the **USB-C** port.                                                                             
+**Steady Node** is an open-source hardware and software project designed to be a compact **two DMX univers CRMX transmitter** that can be attached to the back of an **iPad**, with ArtNet data passing through the **USB-C** port.                                                                             
 There is also a second USB-C port to connect all kinds of peripherals, like  your favorite MIDI faders, to the iPad.  
 
-It's compatible with all app that support ArtNet, such as Blackout, Luminair and others.
+It's compatible with all app that support ArtNet, such as Blackout, Luminair and others as it creat a local ethernet network.
 
-Steady Node is intended for use on film sets by lighting technicians who need a portable solution without relying on Wi-Fi, which can often be unstable and prone to cutting out at the worst moments.
 
 Although the project is still under development, it is currently functional, with prototypes already being tested on set.
 
@@ -20,7 +19,7 @@ You can follow its open development here and even participate if you wish :)
 
 
 
-### Credits:
+## Credits:
 A lot of this project is forked from Expanse Electronics and Matt projects.  
 
 You can purchase Expanse Electronics nodes by clicking [here](https:/expanseelectronics.com/).
