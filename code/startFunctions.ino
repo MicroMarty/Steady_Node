@@ -20,62 +20,62 @@ void doNodeReport() {
   if (nextNodeReport > millis())
     return;
 
-  char c[ARTNET_NODE_REPORT_LENGTH];
+    char c[ARTNET_NODE_REPORT_LENGTH];
 
-  if (nodeErrorTimeout > millis())
-    nextNodeReport = millis() + 2000;
-  else
-    nextNodeReport = millis() + 5000;
+    if (nodeErrorTimeout > millis())
+      nextNodeReport = millis() + 2000;
+    else
+      nextNodeReport = millis() + 5000;
 
-  if (nodeError[0] != '\0' && !nodeErrorShowing && nodeErrorTimeout > millis()) {
+    if (nodeError[0] != '\0' && !nodeErrorShowing && nodeErrorTimeout > millis()) {
 
-    nodeErrorShowing = true;
-    strcpy(c, nodeError);
+      nodeErrorShowing = true;
+      strcpy(c, nodeError);
 
-  } else {
-    nodeErrorShowing = false;
+    } else {
+      nodeErrorShowing = false;
 
-    strcpy(c, "OK: PortA:");
+      strcpy(c, "OK: PortA:");
 
-    switch (deviceSettings.portAmode) {
-      case TYPE_DMX_OUT:
-        sprintf(c, "%s DMX Out", c);
-        break;
+      switch (deviceSettings.portAmode) {
+        case TYPE_DMX_OUT:
+          sprintf(c, "%s DMX Out", c);
+          break;
 
-      case TYPE_RDM_OUT:
-        sprintf(c, "%s RDM Out", c);
-        break;
+        case TYPE_RDM_OUT:
+          sprintf(c, "%s RDM Out", c);
+          break;
 
-      case TYPE_DMX_IN:
-        sprintf(c, "%s DMX In", c);
-        break;
+        case TYPE_DMX_IN:
+          sprintf(c, "%s DMX In", c);
+          break;
 
-      case TYPE_WS2812:
-        if (deviceSettings.portApixMode == FX_MODE_12)
-          sprintf(c, "%s 12chan", c);
-        sprintf(c, "%s WS2812 %ipixels", c, deviceSettings.portAnumPix);
-        break;
-    }
+        case TYPE_WS2812:
+          if (deviceSettings.portApixMode == FX_MODE_12)
+            sprintf(c, "%s 12chan", c);
+          sprintf(c, "%s WS2812 %ipixels", c, deviceSettings.portAnumPix);
+          break;
+      }
 
-#ifndef ONE_PORT
-    sprintf(c, "%s. PortB:", c);
+    #ifndef ONE_PORT
+        sprintf(c, "%s. PortB:", c);
 
-    switch (deviceSettings.portBmode) {
-      case TYPE_DMX_OUT:
-        sprintf(c, "%s DMX Out", c);
-        break;
+        switch (deviceSettings.portBmode) {
+          case TYPE_DMX_OUT:
+            sprintf(c, "%s DMX Out", c);
+            break;
 
-      case TYPE_RDM_OUT:
-        sprintf(c, "%s RDM Out", c);
-        break;
+          case TYPE_RDM_OUT:
+            sprintf(c, "%s RDM Out", c);
+            break;
 
-      case TYPE_WS2812:
-        if (deviceSettings.portBpixMode == FX_MODE_12)
-          sprintf(c, "%s 12chan", c);
-        sprintf(c, "%s WS2812 %ipixels", c, deviceSettings.portBnumPix);
-        break;
-    }
-#endif
+          case TYPE_WS2812:
+            if (deviceSettings.portBpixMode == FX_MODE_12)
+              sprintf(c, "%s 12chan", c);
+            sprintf(c, "%s WS2812 %ipixels", c, deviceSettings.portBnumPix);
+            break;
+        }
+    #endif
   }
 
   artRDM.setNodeReport(c, ARTNET_RC_POWER_OK);
@@ -99,9 +99,8 @@ void portSetup() {
     dmxA.dmxIn(true);
     dmxA.setInputCallback(dmxIn);
 
-    dataIn = (byte*) os_malloc(sizeof(byte) * 512);
+    dataIn = (byte*)os_malloc(sizeof(byte) * 512);
     memset(dataIn, 0, 512);
-
   }
 
 #ifndef ONE_PORT
@@ -114,7 +113,6 @@ void portSetup() {
       dmxB.rdmSetCallBack(rdmReceivedB);
       dmxB.todSetCallBack(sendTodB);
     }
-
   }
 #endif
 }
@@ -281,7 +279,7 @@ void webStart() {
 
 
 void wifiStart() {
-  sprintf(deviceSettings.hotspotSSID, "expanseNodeG5_%05u", (ESP.getChipId() & 0xFF));
+  //sprintf(deviceSettings.hotspotSSID, "expanseNodeG5_%05u", (ESP.getChipId() & 0xFF));
   sprintf(deviceSettings.nodeName, "expanseNodeG5_%05u", (ESP.getChipId() & 0xFF));
   sprintf(deviceSettings.longName, "expanseNode%05u", (ESP.getChipId() & 0xFF));
 
@@ -305,7 +303,7 @@ void wifiStart() {
   deviceSettings.ip = Ethernet.localIP();
   deviceSettings.subnet = Ethernet.subnetMask();
   deviceSettings.gateway = Ethernet.gatewayIP();
-  deviceSettings.broadcast = {~deviceSettings.subnet[0] | (deviceSettings.ip[0] & deviceSettings.subnet[0]), ~deviceSettings.subnet[1] | (deviceSettings.ip[1] & deviceSettings.subnet[1]), ~deviceSettings.subnet[2] | (deviceSettings.ip[2] & deviceSettings.subnet[2]), ~deviceSettings.subnet[3] | (deviceSettings.ip[3] & deviceSettings.subnet[3])};
-  sprintf(wifiStatus, "Wifi connected.<br />SSID: %s", deviceSettings.wifiSSID);
+  deviceSettings.broadcast = { ~deviceSettings.subnet[0] | (deviceSettings.ip[0] & deviceSettings.subnet[0]), ~deviceSettings.subnet[1] | (deviceSettings.ip[1] & deviceSettings.subnet[1]), ~deviceSettings.subnet[2] | (deviceSettings.ip[2] & deviceSettings.subnet[2]), ~deviceSettings.subnet[3] | (deviceSettings.ip[3] & deviceSettings.subnet[3]) };
+  //sprintf(wifiStatus, "Wifi connected.<br />SSID: %s", deviceSettings.wifiSSID);
   yield();
 }

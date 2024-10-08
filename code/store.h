@@ -1,5 +1,5 @@
 /*
-dualETH Ethernet ArtNet Node 
+dualETH Ethernet ArtNet Node
 
 Base Code Copyright (c) 2016, Matthew Tong
 https://github.com/mtongnz/
@@ -48,21 +48,21 @@ struct StoreStruct {
   bool dhcpEnable, standAloneEnable;
   char nodeName[18], longName[64], wifiSSID[40], wifiPass[40], hotspotSSID[20], hotspotPass[20];
   uint16_t hotspotDelay;
-  uint8_t portAmode, portBmode, portAprot, portBprot, portAmerge, portBmerge;
+  bool portAEnable;uint8_t portAmode, portBmode, portAprot, portBprot, portAmerge, portBmerge;
   uint8_t portAnet, portAsub, portAuni[4], portBnet, portBsub, portBuni[4], portAsACNuni[4], portBsACNuni[4];
   uint16_t portAnumPix, portBnumPix, portApixConfig, portBpixConfig;
   bool doFirmwareUpdate;
   uint8_t portApixMode, portBpixMode;
   uint16_t portApixFXstart, portBpixFXstart;
   uint8_t resetCounter, wdtCounter;
-  
+
 } deviceSettings = {
   CONFIG_VERSION,
   IPAddress(10, 0, 0, 1), IPAddress(255, 0, 0, 0), IPAddress(10, 0, 0, 1), IPAddress(255, 0, 0, 0), IPAddress(10, 0, 0, 1), IPAddress(255, 0, 0, 0), IPAddress(255, 255, 255, 255), IPAddress(255, 255, 255, 255),
-  true, false,
-  "expanseNodeG5", "expanseNodeG5", "", "", "expanseNodeG5", "",
+  false, false,
+  "expanseNodeG5", "expanseNodeG5", "", "", "", "",
   15,
-  TYPE_DMX_OUT, TYPE_DMX_OUT, PROT_ARTNET, PROT_ARTNET, MERGE_HTP, MERGE_HTP,
+  false, TYPE_DMX_OUT, TYPE_DMX_OUT, PROT_ARTNET, PROT_ARTNET, MERGE_HTP, MERGE_HTP,
   0, 0, {0, 1, 2, 3}, 0, 0, {4, 5, 6, 7}, {1, 2, 3, 4}, {5, 6, 7, 8},
   680, 680, 0, 0,
   false,
@@ -75,7 +75,7 @@ struct StoreStruct {
 void eepromSave() {
   for (uint16_t t = 0; t < sizeof(deviceSettings); t++)
     EEPROM.write(CONFIG_START + t, *((char*)&deviceSettings + t));
-  
+
   EEPROM.commit();
 }
 
@@ -86,22 +86,31 @@ void eepromLoad() {
 
     StoreStruct tmpStore;
     tmpStore = deviceSettings;
-    
+
     for (uint16_t t = 0; t < sizeof(deviceSettings); t++)
       *((char*)&deviceSettings + t) = EEPROM.read(CONFIG_START + t);
-    
-    if (deviceSettings.resetCounter >= 5 || deviceSettings.wdtCounter >= 10) {
-      deviceSettings.wdtCounter = 0;
-      deviceSettings.resetCounter = 0;
 
-      deviceSettings = tmpStore;
-    }
+    // if (deviceSettings.resetCounter >= 5 || deviceSettings.wdtCounter >= 10) {
+    //   deviceSettings.wdtCounter = 0;
+    //   deviceSettings.resetCounter = 0;
+
+    //   deviceSettings = tmpStore;
+    // }
 
   } else {
     eepromSave();
     delay(500);
-    
+
     ESP.eraseConfig();
     while(1);
   }
 }
+
+void eepromReset() { 
+    StoreStruct tmpStore; 
+    deviceSettings = tmpStore;
+    eepromSave();
+    delay(500);
+    ESP.eraseConfig();  
+}
+

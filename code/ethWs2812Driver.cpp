@@ -72,10 +72,12 @@ byte ws2812Driver::setPixel(uint8_t port, uint16_t pixel, uint8_t r, uint8_t g, 
   a[chan + 1] = r;
   a[chan] = g;
   a[chan + 2] = b;
+  return true;
 }
 
 byte ws2812Driver::setPixel(uint8_t port, uint16_t pixel, uint32_t colour) {
   setPixel(port, pixel, ((colour >> 16) & 0xFF), ((colour >> 8) & 0xFF), (colour & 0xFF));
+  return true;
 }
 
 uint32_t ws2812Driver::getPixel(uint8_t port) {

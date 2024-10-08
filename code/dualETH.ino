@@ -41,7 +41,7 @@ extern "C" {
 #define ESTA_MAN 0x7D00
 #define ESTA_DEV 0xEE000000
 
-#define DMX_DIR_A 16
+#define DMX_DIR_A 15
 #define DMX_TX_A 1
 #define DMX_TX_B 2
 
@@ -98,21 +98,39 @@ bool newDmxIn = false;
 bool doReboot = false;
 byte* dataIn;
 
+#define RESET_PIN 4
+//alimenter en 5v la puce MAX485
+#define ENA_MAX485_PIN 16
+//activer le wifi
+#define ENABLE_WIFI false
+
+#define FPM_SLEEP_MAX_TIME 0xFFFFFFF
+
+void WiFiOn();
+void WiFiOff();
 
 void setup(void) {
+
+  pinMode(RESET_PIN, INPUT);
+  
+  pinMode(ENA_MAX485_PIN, OUTPUT);
+  digitalWrite(ENA_MAX485_PIN, LOW);
+
   pinMode(DMX_DIR_A, OUTPUT);
   digitalWrite(DMX_DIR_A, LOW);
 
-  pinMode(STATUS_LED_PIN, OUTPUT);
-  digitalWrite(STATUS_LED_PIN, LOW);
+  // pinMode(STATUS_LED_PIN, OUTPUT);
+  // digitalWrite(STATUS_LED_PIN, LOW);
   delay(10);
 
-  Ethernet.init(15);
+  Ethernet.init(0);
 
   setStatusLed(STATUS_LED_S, CYAN);
   doStatusLedOutput();
 
-  wifi_set_sleep_type(NONE_SLEEP_T);
+  //wifi_set_sleep_type(NONE_SLEEP_T);
+  //wifi_fpm_do_sleep(0xFFFFFFF);
+
   bool resetDefaults = false;
 
   EEPROM.begin(1024);
@@ -135,11 +153,11 @@ void setup(void) {
     deviceSettings.resetCounter++;
 
   eepromSave();
-
+ 
   wifiStart();
 
   webStart();
-
+ 
   if (!deviceSettings.doFirmwareUpdate && deviceSettings.wdtCounter <= 3) {
     if (deviceSettings.portAmode == TYPE_DMX_IN && deviceSettings.portBmode == TYPE_RDM_OUT)
       deviceSettings.portBmode = TYPE_DMX_OUT;
@@ -153,10 +171,23 @@ void setup(void) {
   } else
     deviceSettings.doFirmwareUpdate = false;
 
-  delay(10);
+  if(!ENABLE_WIFI){ 
+    WiFiOff();
+    delay(5000);  
+  }else{
+    WiFiOn();
+    delay(5000);
+    ESP.deepSleep(1e6 * 10, WAKE_RF_DEFAULT); // sleep 10 seconds
+  }
+
+  checkPortAEnable(); 
 }
 
 void loop(void) {
+
+  //toggle PortA if enabled;
+  checkPortAEnable();
+
   if (deviceSettings.resetCounter != 0 && millis() > 6000) {
     deviceSettings.resetCounter = 0;
     deviceSettings.wdtCounter = 0;
@@ -217,6 +248,10 @@ void loop(void) {
     doStatusLedOutput();
     statusTimer = millis() + 1000;
   }
+ 
+  //Reset if RESET button is clicked;
+  checkResetBtn(); 
+ 
 }
 
 void dmxHandle(uint8_t group, uint8_t port, uint16_t numChans, bool syncEnabled) {
@@ -356,4 +391,40 @@ void doStatusLedOutput() {
 
 void setStatusLed(uint8_t num, uint32_t col) {
   memcpy(&statusLedData[num * 3], &col, 3);
+}
+
+void checkResetBtn() {
+  if (digitalRead(RESET_PIN) == HIGH){ 
+     eepromReset();
+     doReboot = true;
+  }
+}
+
+void checkPortAEnable() {
+  if (deviceSettings.portAEnable){ 
+    digitalWrite(ENA_MAX485_PIN, HIGH);
+  }else{
+    digitalWrite(ENA_MAX485_PIN, LOW);
+  }
+}
+
+void WiFiOff() {
+
+    //Serial.println("diconnecting client and wifi"); 
+    wifi_station_disconnect();
+    wifi_set_opmode(NULL_MODE);
+    wifi_set_sleep_type(MODEM_SLEEP_T);
+    wifi_fpm_open();
+    wifi_fpm_do_sleep(FPM_SLEEP_MAX_TIME);
+
+}
+
+void WiFiOn() {
+
+    wifi_fpm_do_wakeup();
+    wifi_fpm_close();
+
+    //Serial.println("Reconnecting");
+    wifi_set_opmode(STATION_MODE);
+    wifi_station_connect();
 }
