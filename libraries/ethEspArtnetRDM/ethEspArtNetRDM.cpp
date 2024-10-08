@@ -2,7 +2,7 @@
 dualETH Ethernet ArtNet Node 
 
 Base Code Copyright (c) 2016, Matthew Tong
-https://github.com/mtongnz/
+https://github.com/mtongnz/8
 Ethernet Implementation Copyright (c) 2023, expanseElectronics Ltd
 https://github.com/expanseElectronics/
 
@@ -68,7 +68,7 @@ void esp8266ArtNetRDM::end() {
   _art = 0;
 }
 
-void esp8266ArtNetRDM::init(IPAddress ip, IPAddress subnet, bool dhcp, char* shortname, char* longname, uint16_t oem, uint16_t esta, uint8_t* mac) {
+void esp8266ArtNetRDM::init(IPAddress ip, IPAddress subnet, bool dhcp, const char* shortname, const char* longname, uint16_t oem, uint16_t esta, uint8_t* mac) {
   if (_art != 0)
     os_free(_art);
 
@@ -220,6 +220,7 @@ bool esp8266ArtNetRDM::closePort(uint8_t g, uint8_t p) {
   group->ports[p] = 0;
   group->numPorts--;
   group->ports[p] == 0;
+  return true;
 }
 
 void esp8266ArtNetRDM::setArtDMXCallback(artDMXCallBack callback) {
@@ -1322,7 +1323,7 @@ char* esp8266ArtNetRDM::getLongName() {
   return _art->longName;
 }
 
-void esp8266ArtNetRDM::setNodeReport(char* c, uint16_t code) {
+void esp8266ArtNetRDM::setNodeReport(const char* c, uint16_t code) {
   if (_art == 0)
     return;
 
