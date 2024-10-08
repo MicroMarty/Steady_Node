@@ -1,5 +1,6 @@
 # Steady Node
 
+![3dpcb](https://github.com/MicroMarty/Steady_Node/blob/main/Hardware/3D_PCB_V0.91_2024-10-08.png?raw=true)
 ## About:
 
 **Steady Node** is an open-source hardware and software project designed to be a compact **two DMX univers CRMX transmitter** that can be attached to the back of an **iPad**, with ArtNet data passing through the **USB-C** port.                                                                             
