@@ -20,10 +20,10 @@ You can follow its open development here and even participate if you wish :)
 
 
 ## Credits:
-A lot of this project is forked from Expanse Electronics and Matt projects.  
+A lot of this project is forked from expanseElectronics and Matt projects.  
 
-You can purchase Expanse Electronics nodes by clicking [here](https:/expanseelectronics.com/).
+You can purchase expanseElectronics nodes by clicking [here](https:/expanseelectronics.com/).
 And here is their [GitHub](https://github.com/expanseElectronics/ethernetNodes).  
 Matt's ESP8266 based WiFi ArtNet to DMX, RDM and LED Pixels project can be found [here](https://github.com/mtongnz/ESP8266_ArtNetNode_v2).  
 
-I thank Matt and Expanse Electronics for their amazing project and all their features.
+I thank Matt and expanseElectronics for their amazing project and all their features!
