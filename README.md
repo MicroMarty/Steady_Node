@@ -18,6 +18,9 @@ We hope it will soon be ready for commercial release.
 You can follow its open development here and even participate if you wish :)
 
 
+## Hardware:
+
+Schematics and PCB are fully accessible on [EasyEDA](https://oshwlab.com/martymicro/v0-91)   
 
 
 ## Credits:
