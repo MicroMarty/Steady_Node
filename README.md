@@ -3,7 +3,7 @@
 ![3dpcb](https://github.com/MicroMarty/Steady_Node/blob/main/Hardware/3D_PCB_V0.91_2024-10-08.png?raw=true)
 ## About:
 
-**Steady Node** is a compact **two DMX univers CRMX transmitter** that can be attached to the back of an **iPad**, with ArtNet data passing through the **USB-C** port.                                                                             
+**Steady Node** is a compact **two univers CRMX transmitter** that can be attached to the back of an **iPad**, with DMX ArtNet data passing through the **USB-C** port.                                                                             
 There is also a second USB-C port to connect all kinds of peripherals, like  your favorite MIDI faders, to the iPad.  
 
 It's compatible with all app that support ArtNet, such as Blackout, Luminair and others as it creat a local ethernet network.
